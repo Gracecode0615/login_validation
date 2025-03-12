@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login Validation</title>
+    <link href="css/style.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!--
+    <style>
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+    </style>
+-->
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo"><span>R</span>ecruitify</div>
+        <div class="form-control">
+            <h2 class="form-title">Sign in</h2>
+            <p id="error-message" class="error-message"></p>
+
+            <div class="login">
+                <form class="loginForm" method="post">
+                    <div class="input-control">
+                        <input type="email" class="emailform" placeholder="Email" required>
+                    </div>
+                    <div class="input-control">
+                        <input type="password" class="passwordform" placeholder="Password" required>
+                    </div>
+
+                    <div class="action-btn">
+                        <span><input type="checkbox"> Remember me</span>
+                        <span>Forgot password?</span>
+                    </div>
+
+                    <button class="sub-btn" type="submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function stopsubmit() {
+            $(".loginForm").submit(function(event) {
+                event.preventDefault();
+            });
+        }
+
+
+        $(".sub-btn").on('click', function() {
+            let emailinput = $(".emailform").val().trim();
+            let passwordinput = $(".passwordform").val().trim();
+            let response = $(".error-message");
+            response.text("");
+
+            // Check if both fields are empty
+            if (emailinput.length === 0 && passwordinput.length === 0) {
+                response.text("Email and Password cannot be empty!").css("color", "red");
+                return false;
+            }
+
+            /// Check if email input is empty /////
+            if (emailinput.length < 1) {
+                stopsubmit();
+                response.text("Email input is empty").css("color", "red");
+                return false;
+            }
+
+            /// check email validation////
+            let emailPattern =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailPattern.test(emailinput)) {
+                response.text("Invalid email format").css("color", "red");
+                return false; // Stop execution
+            }else {
+                response.text("");
+            }
+
+            /// Check if password input is empty ////
+            if (passwordinput === "") {
+                response.text("password cannot be empty!").css("color", "red");
+                return false;
+            }
+
+            if (passwordinput.length < 8) {
+                stopsubmit();
+                response.text("password input is not strong").css("color", "red");
+                return false;
+            }
+
+            if (!/[A-Z]/.test(passwordinput)) {
+                response.text("Password must contain at least one uppercase letter").css("color", "red");
+                return false
+            }
+            if (!/[a-z]/.test(passwordinput)) {
+                response.text("Password must contain at least one lowercase letter");
+                return false;
+            }
+            if (!/\d/.test(passwordinput)) {
+                response.text("Password must contain at least one number").css("color", "red");
+                return false;
+            }
+            if (!/[!@#$%^&*(),.?":{}|<>]/.test(passwordinput)) {
+                response.text("Password must contain at least one special character").css("color", "red");
+                return false;
+            }
+            response.text("Login successful").css("color", "green");
+            
+            
+              // **Submit form after successful validation**
+            setTimeout(() => {
+                window.location.reload(); // Proper way to refresh without redirecting
+            }, 2000);
+
+        });
+    </script>
+</body></html>
